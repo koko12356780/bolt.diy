@@ -21,7 +21,7 @@ jobs:
     
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest] # TODO: add back macos-latest when notarize is figured out
+        os: [ubuntu-latest, windows-latest, macos-latest] # Use unsigned macOS builds for now
         node-version: [18.18.0]
       fail-fast: false
 
@@ -67,11 +67,6 @@ jobs:
       - name: Build Electron app
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CSC_LINK: ${{ secrets.CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: |
           if [ "$RUNNER_OS" == "Windows" ]; then

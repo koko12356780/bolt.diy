@@ -1,10 +1,13 @@
 import { getSystemPrompt } from './prompts/prompts';
 import optimized from './prompts/optimized';
+import { getFineTunedPrompt } from './prompts/new-prompt';
+import type { DesignScheme } from '~/types/design-scheme';
 
 export interface PromptOptions {
   cwd: string;
   allowedHtmlElements: string[];
   modificationTagName: string;
+  designScheme?: DesignScheme;
   supabase?: {
     isConnected: boolean;
     hasSelectedProject: boolean;
@@ -26,12 +29,17 @@ export class PromptLibrary {
   > = {
     default: {
       label: 'Default Prompt',
-      description: 'This is the battle tested default system Prompt',
-      get: (options) => getSystemPrompt(options.cwd, options.supabase),
+      description: 'An fine tuned prompt for better results and less token usage',
+      get: (options) => getFineTunedPrompt(options.cwd, options.supabase, options.designScheme),
+    },
+    original: {
+      label: 'Old Default Prompt',
+      description: 'The OG battle tested default system Prompt',
+      get: (options) => getSystemPrompt(options.cwd, options.supabase, options.designScheme),
     },
     optimized: {
       label: 'Optimized Prompt (experimental)',
-      description: 'an Experimental version of the prompt for lower token usage',
+      description: 'An Experimental version of the prompt for lower token usage',
       get: (options) => optimized(options),
     },
   };
